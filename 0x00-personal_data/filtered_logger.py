@@ -19,6 +19,5 @@ from typing import List
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """obfuscate a log datum"""
-    return re.sub(
-        f'(?:(?<=^)|(?<={separator}))({"|".join(fields)}){separator}',
-        f'{redaction}{separator}', message)
+    return re.sub(f'(?:(?<=^)|(?<={separator}))({"|".join(fields)})'
+                  f'{separator}', f'{redaction}{separator}', message)
