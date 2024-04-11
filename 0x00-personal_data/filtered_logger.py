@@ -14,6 +14,31 @@ substitution with a single regex."""
 
 import re
 from typing import List
+import logging
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]) -> None:
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Formats a log record as REDACTED"""
+        msg = filter_datum(self.fields, self.REDACTION, record.msg,
+                           self.SEPARATOR)
+        return self.FORMAT % {
+            "name": record.name,
+            "levelname": record.levelname,
+            "asctime": self.formatTime(record, self.datefmt),
+            "message": msg,
+        }
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
