@@ -11,6 +11,7 @@ in the log line (message)
 The function should use a regex to replace occurrences of certain field values.
 filter_datum should be less than 5 lines long and use re.sub to perform the
 substitution with a single regex."""
+
 import os
 import re
 from typing import List
@@ -37,14 +38,14 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
-    con = mysql.connector.connection.MySQLConnection(
+    conn = mysql.connector.connection.MySQLConnection(
         user=username,
         password=password,
         host=host,
         database=db_name
     )
 
-    return con
+    return conn
 
 
 def get_logger() -> logging.Logger:
@@ -57,6 +58,22 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(stream_handler)
     return logger
+
+
+def main():
+    """Retrieves data from the users table and logs it with filtered format."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    fields = [desc[0] for desc in cursor.description]
+
+    logger = get_logger()
+    for row in cursor:
+        filtered_row = {field: row[field] for field in fields}
+        logger.info(filtered_row)
+
+    cursor.close()
+    db.close()
 
 
 class RedactingFormatter(logging.Formatter):
@@ -76,3 +93,7 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(
             self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
+
+
+if __name__ == "__main__":
+    main()
