@@ -38,17 +38,12 @@ def get_db() -> mysql.connector.connection.MySQLConnection | None:
     db_password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     db_host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
-
-    try:
-        conn = mysql.connector.connection.MySQLConnection(
+    return mysql.connector.connection.MySQLConnection(
             host=db_host,
             user=db_user,
             password=db_password,
             database=db_name
         )
-        return conn
-    except mysql.connector.Error:
-        return
 
 
 def get_logger() -> logging.Logger:
