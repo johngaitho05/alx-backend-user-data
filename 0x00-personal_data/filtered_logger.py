@@ -12,10 +12,11 @@ The function should use a regex to replace occurrences of certain field values.
 filter_datum should be less than 5 lines long and use re.sub to perform the
 substitution with a single regex."""
 
+import logging
 import os
 import re
 from typing import List
-import logging
+
 import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
