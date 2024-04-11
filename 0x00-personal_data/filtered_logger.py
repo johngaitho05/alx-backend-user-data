@@ -30,13 +30,15 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Fuction documentation"""
+    """Returns a connection to the database"""
     username = os.getenv("PERSONAL_DATA_DB_USERNAME")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD")
     host = os.getenv("PERSONAL_DATA_DB_HOST")
     name = os.getenv("PERSONAL_DATA_DB_NAME")
-    connection = mysql.connector.connection.MySQLConnection(
-        user=username, password=password, host=host, database=name)
+    connection = mysql.connector.connection.MySQLConnection(user=username,
+                                                            password=password,
+                                                            host=host,
+                                                            database=name)
     return connection
 
 
