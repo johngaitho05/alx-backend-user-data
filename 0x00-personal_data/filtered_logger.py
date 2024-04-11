@@ -16,6 +16,8 @@ import re
 from typing import List
 import logging
 import mysql.connector
+from mysql.connector.abstracts import MySQLConnectionAbstract
+from mysql.connector.pooling import PooledMySQLConnection
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -29,17 +31,17 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     return message
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> PooledMySQLConnection | MySQLConnectionAbstract:
     """Returns a connection to the database"""
-    username = os.getenv("PERSONAL_DATA_DB_USERNAME", 'root')
-    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", '')
-    host = os.getenv("PERSONAL_DATA_DB_HOST", 'localhost')
-    name = os.getenv("PERSONAL_DATA_DB_NAME")
-    connection = mysql.connector.connection.MySQLConnection(user=username,
-                                                            password=password,
-                                                            host=host,
-                                                            database=name)
-    return connection
+    user = os.getenv('PERSONAL_DATA_DB_USERNAME') or "root"
+    passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ""
+    host = os.getenv('PERSONAL_DATA_DB_HOST') or "localhost"
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+    conn = mysql.connector.connect(user=user,
+                                   password=passwd,
+                                   host=host,
+                                   database=db_name)
+    return conn
 
 
 def get_logger() -> logging.Logger:
