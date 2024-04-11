@@ -11,10 +11,11 @@ in the log line (message)
 The function should use a regex to replace occurrences of certain field values.
 filter_datum should be less than 5 lines long and use re.sub to perform the
 substitution with a single regex."""
-
+import os
 import re
 from typing import List
 import logging
+import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -26,6 +27,17 @@ def filter_datum(fields: List[str], redaction: str, message: str,
         pattern = r'(?<={}=)(.+?)(?={})'.format(field, separator)
         message = re.sub(pattern, redaction, message)
     return message
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Fuction documentation"""
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD")
+    host = os.getenv("PERSONAL_DATA_DB_HOST")
+    name = os.getenv("PERSONAL_DATA_DB_NAME")
+    connection = mysql.connector.connection.MySQLConnection(
+        user=username, password=password, host=host, database=name)
+    return connection
 
 
 def get_logger() -> logging.Logger:
