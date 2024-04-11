@@ -63,12 +63,13 @@ def main():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
-    fields = [desc[0] for desc in cursor.description]
+    field_names = [i[0] for i in cursor.description]
 
     logger = get_logger()
+
     for row in cursor:
-        filtered_row = {field: row[field] for field in fields}
-        logger.info(filtered_row)
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
 
     cursor.close()
     db.close()
