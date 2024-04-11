@@ -13,9 +13,11 @@ filter_datum should be less than 5 lines long and use re.sub to perform the
 substitution with a single regex."""
 
 import re
+from typing import List
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
     """obfuscate a log datum"""
     return re.sub(
         f'(?:(?<=^)|(?<={separator}))({"|".join(fields)}){separator}',
