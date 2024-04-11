@@ -1,7 +1,5 @@
 import re
 
-import re
-
 
 def filter_datum(fields, redaction, message, separator):
     """obfuscate a log datum"""
