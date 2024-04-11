@@ -32,21 +32,23 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     return message
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> mysql.connector.connect:
     """Returns a connection to the database"""
-    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_user = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
-    conn = mysql.connector.connection.MySQLConnection(
-        user=username,
-        password=password,
-        host=host,
-        database=db_name
-    )
-
-    return conn
+    try:
+        conn = mysql.connector.connect(
+            host=db_host,
+            user=db_user,
+            password=db_password,
+            database=db_name
+        )
+        return conn
+    except mysql.connector.Error:
+        return
 
 
 def get_logger() -> logging.Logger:
