@@ -16,8 +16,6 @@ import re
 from typing import List
 import logging
 import mysql.connector
-from mysql.connector.abstracts import MySQLConnectionAbstract
-from mysql.connector.pooling import PooledMySQLConnection
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -31,7 +29,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     return message
 
 
-def get_db() -> PooledMySQLConnection | MySQLConnectionAbstract:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Returns a connection to the database"""
     user = os.getenv('PERSONAL_DATA_DB_USERNAME') or "root"
     passwd = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ""
