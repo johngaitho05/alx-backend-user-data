@@ -32,7 +32,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     return message
 
 
-def get_db() -> mysql.connector.connect:
+def get_db() -> mysql.connector.connection.MySQLConnection | None:
     """Returns a connection to the database"""
     db_user = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     db_password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
@@ -40,7 +40,7 @@ def get_db() -> mysql.connector.connect:
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
     try:
-        conn = mysql.connector.connect(
+        conn = mysql.connector.connection.MySQLConnection(
             host=db_host,
             user=db_user,
             password=db_password,
