@@ -17,9 +17,13 @@ class Auth:
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Checks whether authentication is for a given path"""
-        if not path or not excluded_paths:
+        if not path:
             return True
+        if not excluded_paths:
+            return True
+        path = path.rstrip('/')
         for excl_path in excluded_paths:
+            excl_path = excl_path.rstrip('/')
             if excl_path.endswith('/'):
                 # Removing trailing slash for comparison
                 excl_path = excl_path[:-1]
