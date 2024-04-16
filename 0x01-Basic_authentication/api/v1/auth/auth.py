@@ -23,8 +23,10 @@ class Auth:
         return path.rstrip('/') not in [p.rstrip('/') for p in excluded_paths]
 
     def authorization_header(self, request: flask_request = None) -> str:
-        """Returns the authorization header of a request"""
-        return
+        """Returns the value of the authorization header of a request"""
+        if not request or 'Authorization' not in request.headers:
+            return
+        return request.headers['Authorization']
 
     def current_user(self, request: flask_request = None) -> TypeVar('User'):
         """Returns the current user."""
