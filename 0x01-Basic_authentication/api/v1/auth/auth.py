@@ -15,25 +15,18 @@ class Auth:
         """Initialization"""
         pass
 
-    def matches(self, s1, s2) -> bool:
-        """Checks if two strings are equal"""
-        pattern = re.compile(s1)
-        return bool(pattern.match(s2))
-
-    def strip(self, s):
-        """Strip trailing slashes"""
-        if s[-1] == '*' and len(s) > 1:
-            return s[:-1].rstrip('/') + '*'
-        return s.rstrip('/')
-
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Checks whether authentication is for a given path"""
-        if not path:
-            return True
-        if not excluded_paths:
-            return True
-        return not any([self.matches(self.strip(p), self.strip(path)) for p
-                        in excluded_paths])
+        for excl_path in excluded_paths:
+            if excl_path.endswith('/'):
+                # Removing trailing slash for comparison
+                excl_path = excl_path[:-1]
+            if excl_path.endswith('*'):
+                if path.startswith(excl_path[:-1]):
+                    return False
+            elif excl_path == path:
+                return False
+        return True
 
     def authorization_header(self, request: flask_request = None) -> str:
         """Returns the value of the authorization header of a request"""
