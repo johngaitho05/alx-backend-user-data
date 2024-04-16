@@ -20,13 +20,19 @@ class Auth:
         pattern = re.compile(s1)
         return bool(pattern.match(s2))
 
+    def strip(self, s):
+        """Strip trailing slashes"""
+        if s[-1] == '*' and len(s) > 1:
+            return s[:-1].rstrip('/') + '*'
+        return s.rstrip('/')
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Checks whether authentication is for a given path"""
         if not path:
             return True
         if not excluded_paths:
             return True
-        return not any([self.matches(p.rstrip('/'), path.rstrip('/')) for p
+        return not any([self.matches(self.strip(p), self.strip(path)) for p
                         in excluded_paths])
 
     def authorization_header(self, request: flask_request = None) -> str:
