@@ -31,8 +31,3 @@ class Auth:
     def current_user(self, request: flask_request = None) -> TypeVar('User'):
         """Returns the current user."""
         return
-
-
-class BasicAuth(Auth):
-    """Basic Auth class"""
-    pass
