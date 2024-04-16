@@ -4,6 +4,7 @@ Basic authentication module
 """
 import base64
 import binascii
+import os.path
 from typing import TypeVar
 from models.user import User
 
@@ -48,6 +49,8 @@ class BasicAuth(Auth):
         if user_email is None or type(user_email) is not str:
             return
         if user_pwd is None or type(user_pwd) is not str:
+            return
+        if not os.path.isfile('.db_User.json'):
             return
         users = User.search({'email': user_email})
         return next((user for user in users if
