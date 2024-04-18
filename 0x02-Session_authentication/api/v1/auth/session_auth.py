@@ -2,6 +2,7 @@
 """
 Session authentication module
 """
+import os
 import uuid
 
 from .auth import Auth

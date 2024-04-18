@@ -2,6 +2,7 @@
 """
 Request Authorization Template
 """
+import os
 import re
 from typing import List, TypeVar
 
@@ -40,3 +41,10 @@ class Auth:
     def current_user(self, request: flask_request = None) -> TypeVar('User'):
         """Returns the current user."""
         return
+
+    def session_cookie(self, request=None):
+        """Gets a session cookie"""
+        if request is None:
+            return
+        session_name = os.environ.get('SESSION_NAME')
+        return request.cookies.get(session_name)
