@@ -37,7 +37,8 @@ def require_auth():
         return
     if not auth.require_auth(request.path, excluded_paths):
         return
-    if not (auth.authorization_header(request) or auth.session_cookie(request)):
+    if not (auth.authorization_header(request) or
+            auth.session_cookie(request)):
         abort(401)
     user = auth.current_user(request)
     if not user:
