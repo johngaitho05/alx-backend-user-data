@@ -2,12 +2,12 @@
 """
 Session authentication module
 """
-import os
 import uuid
 from typing import TypeVar
 
-from .auth import Auth
 from models.user import User
+
+from .auth import Auth
 
 
 class SessionAuth(Auth):

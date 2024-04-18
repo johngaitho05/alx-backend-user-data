@@ -4,7 +4,7 @@
 import os
 
 from api.v1.views import app_views
-from flask import request, jsonify, session, abort
+from flask import request, jsonify, abort
 from models.user import User
 
 
