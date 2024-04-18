@@ -21,14 +21,13 @@ class SessionDBAuth(SessionExpAuth):
         session_id = str(uuid.uuid4())
         session = UserSession(user_id=user_id, session_id=session_id)
         session.save()
-        return session_id
+        return session.id
 
     def user_id_for_session_id(self, session_id=None) -> Optional[str]:
         """Gets user id for given session_id"""
         if session_id is None:
             return
-        sessions = UserSession.search({'session_id': session_id})
-        session = sessions and sessions[0]
+        session = UserSession.get(session_id)
         if not session:
             return
         if (session.created_at + timedelta(seconds=self.session_duration) <
@@ -44,8 +43,8 @@ class SessionDBAuth(SessionExpAuth):
         session_id = self.session_cookie(request)
         if not session_id:
             return False
-        sessions = UserSession.search({'session_id': session_id})
-        if not sessions:
+        session = UserSession.get(session_id)
+        if not session:
             return False
-        sessions[0].remove()
+        session.remove()
         return True
