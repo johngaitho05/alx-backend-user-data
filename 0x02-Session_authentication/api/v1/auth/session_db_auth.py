@@ -31,6 +31,8 @@ class SessionDBAuth(SessionExpAuth):
         session = sessions and sessions[0]
         if not session:
             return
+        if self.session_duration <= 0:
+            return session.user_id
         if (session.created_at + timedelta(seconds=self.session_duration) <
                 datetime.utcnow()):
             return
