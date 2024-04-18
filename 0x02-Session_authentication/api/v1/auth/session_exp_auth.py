@@ -10,7 +10,7 @@ from .session_auth import SessionAuth
 
 
 class SessionExpAuth(SessionAuth):
-    """Basic Auth class"""
+    """Session Auth With Expiration Time"""
 
     def __init__(self):
         """Constructor"""

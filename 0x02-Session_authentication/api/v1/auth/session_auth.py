@@ -11,7 +11,7 @@ from .auth import Auth
 
 
 class SessionAuth(Auth):
-    """Basic Auth class"""
+    """Session Auth class"""
 
     user_id_by_session_id = {}
 
