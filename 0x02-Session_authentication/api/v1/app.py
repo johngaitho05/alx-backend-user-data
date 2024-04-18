@@ -9,6 +9,7 @@ from flask_cors import (CORS, cross_origin)
 import os
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
@@ -29,7 +30,7 @@ elif os.getenv("AUTH_TYPE") == "session_auth":
 
 
 @app.before_request
-def require_auth():
+def check_auth():
     """Check authorization"""
     excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
                       '/api/v1/forbidden/', '/api/v1/auth_session/login/']
