@@ -25,4 +25,3 @@ class SessionAuth(Auth):
         if session_id is None or type(session_id) is not str:
             return
         return SessionAuth.user_id_by_session_id.get(session_id)
-    
